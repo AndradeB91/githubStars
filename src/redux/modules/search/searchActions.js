@@ -5,10 +5,10 @@ export const SET_USER = `${MODULE_NAME}/SET_USER`;
 
 export const SEARCH_USER = buildActions(MODULE_NAME, 'SEARCH_USER');
 
-export const setUser = name => ({
+export const setUser = login => ({
   type: SET_USER,
   payload: {
-    name,
+    login,
   },
 })
 

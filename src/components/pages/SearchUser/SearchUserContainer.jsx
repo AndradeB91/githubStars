@@ -7,8 +7,8 @@ import { search } from '../../../redux';
 class SearchUser extends React.Component {
 
   handleClick = () => {
-    const { username } = this.props;
-    this.props.searchUserAction(username);
+    const { login } = this.props;
+    this.props.searchUserAction(login);
   }
 
   handleChange = (event) => {
@@ -31,7 +31,7 @@ class SearchUser extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  username: search.selectors.getUserName,
+  login: search.selectors.getUserLogin,
 });
 
 const mapDispatchToProps = {

@@ -1,5 +1,6 @@
 import { Iterable, fromJS, isImmutable } from 'immutable';
-// import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history';
+
 export const asImmutable = (obj) => (Iterable.isIterable(obj) ? obj : fromJS(obj));
 
 export const emptyMap = asImmutable({});
@@ -12,11 +13,11 @@ export const buildActions = (moduleName, prefix, sulfix) => ({
 });
 
 export const toArrayPath = (path) => path.split("/").filter(p => p.replace(" ", "").length > 0);
-// 
-// export const getHistory = () => {
-//   if (window.browserHistory) {
-//     return window.browserHistory;
-//   } else {
-//     return window.browserHistory = createBrowserHistory();
-//   }
-// }
+
+export const getHistory = () => {
+  if (window.browserHistory) {
+    return window.browserHistory;
+  } else {
+    return window.browserHistory = createBrowserHistory();
+  }
+}

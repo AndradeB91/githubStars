@@ -1,0 +1,8 @@
+.extraInfoContainer {
+	display: flex;
+	justify-content: left;
+}
+
+.description {
+	word-break: break-all;
+}

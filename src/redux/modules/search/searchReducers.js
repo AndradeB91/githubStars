@@ -4,6 +4,12 @@ import * as actions from './searchActions';
 const initialState = asImmutable({
   user: {
     name: '',
+    login: '',
+    avatarUrl: '',
+    bio: '',
+    location: '',
+    email: '',
+    url: '',
   },
 });
 
@@ -12,8 +18,8 @@ export const reducer = (state = initialState, action) => {
     case actions.SET_USER: {
       return state.mergeIn(['user'], asImmutable(action.payload));
     }
-    case actions.SEARCH_USER.REQUESTED: {
-      debugger;
+    case actions.SEARCH_USER.SUCCEEDED: {
+      return state.mergeIn(['user'], asImmutable(action.payload));
     }
     default:
       return state;

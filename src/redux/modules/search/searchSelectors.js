@@ -1,6 +1,12 @@
 import { emptyMap } from '../../../utils';
 import MODULE_NAME from './searchConstants';
 
-export const getUserName = state => state.getIn([`${MODULE_NAME}`, 'user', 'name'], emptyMap);
+export const getUserLogin = state => (
+	state.getIn([`${MODULE_NAME}`, 'user', 'login'], emptyMap)
+);
+
+export const getAllUserInfos = state => (
+	state.getIn([`${MODULE_NAME}`, 'user'], emptyMap)
+)
 
 

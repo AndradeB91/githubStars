@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Router, Switch } from 'react-router-dom';
+import { Switch, Route, Router } from 'react-router-dom';
 import SearchUser from '../../pages/SearchUser';
+import Profile from '../../pages/Profile';
+import { getHistory } from '../../../utils';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <SearchUser/>
+        <Router history={getHistory()}>
+          <Switch>
+            <Route exact path="/" component={SearchUser}/>
+            <Route exact path="/profile" component={Profile}/>
+          </Switch>
+        </Router>
       </div>
     );
   }

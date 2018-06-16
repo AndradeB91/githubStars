@@ -2,7 +2,8 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { combineReducers } from 'redux-immutable';
 import createSagaMiddleware from 'redux-saga';
 import { createLogger } from 'redux-logger';
-import { asImmutable } from '../utils';
+import { asImmutable, getHistory } from '../utils';
+import { routerMiddleware } from 'react-router-redux'
 import * as modules from './modules';
 
 const getReducersFromModules = modules => Object.keys(modules).reduce((acc, curr) => {
@@ -36,9 +37,11 @@ export const createReduxStore = () => {
   const middlewares = [];
   const enhancers = [];
   const sagaMiddleware = createSagaMiddleware();
+  const routersMiddleware = routerMiddleware(getHistory());
 
   middlewares.push(createLogger({ collapsed: true }));
   middlewares.push(sagaMiddleware);
+  middlewares.push(routersMiddleware);
 
   enhancers.push(applyMiddleware(...middlewares));
 

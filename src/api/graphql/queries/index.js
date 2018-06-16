@@ -8,3 +8,35 @@ export const getLoggedUserName = {
     }
   }
 `};
+
+export const getUserInfosByLogin = (login) => ({
+  query: gql`
+  {
+    user(login: ${login}) {
+      name
+      login
+      avatarUrl
+      bio
+      location
+      email
+      url
+      starredRepositories(first: 100) {
+        edges {
+          cursor
+          node {
+            stargazers{
+              totalCount
+            }
+            id
+            name
+            primaryLanguage {
+              id
+              name
+              color
+            }
+          }
+        }
+      }
+    }
+  }
+`});
