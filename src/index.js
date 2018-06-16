@@ -1,8 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createReduxStore } from './redux';
+import { graphqlClient } from './api/graphql';
+import { ApolloProvider } from 'react-apollo';
 import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import App from './components/layout/App';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const store = createReduxStore();
+
+ReactDOM.render((
+  <ApolloProvider client={graphqlClient}>
+    <Provider store={ store }>
+      <App />
+    </Provider>
+  </ApolloProvider>
+  ), document.getElementById('root')
+);
