@@ -2,27 +2,19 @@ import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect'
 import uuid from 'uuid';
-import { Card, Icon, Image } from 'semantic-ui-react'
-
 import { search } from '../../../redux';
-
-import './index.css';
+import Card from '../../CustomCard';
+import Button from '../../CustomButton';
+import Modal from '../../CustomModal';
 
 class Profile extends React.Component {
 
-	renderExtraInformation = array => (
-		array.map(info => (info.data ? 
-			<div key={`${info.data}_${uuid()}`} 
-					 className='extraInfoContainer'>
-				<Icon name = {info.icon}/>
-				<div>{info.data}</div>
-			</div> : null
-		))			 
-	)
-
   render () {
-		const { userInfos } = this.props;
-
+		const { 
+			userInfos, 
+			searchRepositoriesAction,
+			userStarredRepositories
+		} = this.props;
 		const name = userInfos.get('name');
 		const login = userInfos.get('login');
 		const avatarUrl = userInfos.get('avatarUrl');
@@ -30,24 +22,33 @@ class Profile extends React.Component {
 		const location = userInfos.get('location');
 		const email = userInfos.get('email');
 		const url = userInfos.get('url');
+
+		const extraInfos = [
+			{data: location, icon: 'location arrow'},
+			{data: email, icon: 'mail'},
+			{data: url, icon: 'world'},
+		]
 		
     return (
       <Fragment>
-        <Card>
-					<Image src = {avatarUrl}/>
-					<Card.Content>
-						<Card.Header>{name}</Card.Header>
-						<Card.Meta>{login}</Card.Meta>
-						<Card.Description>{bio}</Card.Description>
-					</Card.Content>
-					<Card.Content extra>
-						{this.renderExtraInformation([
-							{data: location, icon: 'location arrow'},
-							{data: email, icon: 'mail'},
-							{data: url, icon: 'world'},
-						])}
-					</Card.Content>
-        </Card>
+        <Card
+					name = {name}
+					login = {login}
+					avatarUrl = {avatarUrl}
+					bio = {bio}
+					location = {location}
+					email = {email}
+					url = {url}
+					extraInfos = {extraInfos}
+				/>
+				<Modal
+					buttonText = 'Show User Starred Repo'
+					headerIcon = 'github' 
+					headerContent = 'Starred Repositories'
+					onClickAction = {searchRepositoriesAction}
+					actionParameter = {login}
+					userStarredRepositories = {userStarredRepositories}
+				/>
       </Fragment>
     )
   }
@@ -55,6 +56,11 @@ class Profile extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   userInfos: search.selectors.getAllUserInfos,
+	userStarredRepositories: search.selectors.getUserStarredRepositories,
 });
 
-export default connect(mapStateToProps)(Profile);
+const mapDispatchToProps = {
+  searchRepositoriesAction: search.actions.searchRepositories, 
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

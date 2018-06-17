@@ -20,19 +20,25 @@ export const getUserInfosByLogin = (login) => ({
       location
       email
       url
+    }
+  }
+`});
+
+export const getUserStarredRepositoriesByLogin = (login) => ({
+  query: gql`
+  {
+    user(login: ${login}) {
       starredRepositories(first: 100) {
         edges {
-          cursor
           node {
+            id
+            name
+            description
             stargazers{
               totalCount
             }
-            id
-            name
-            primaryLanguage {
-              id
-              name
-              color
+            owner {
+              login
             }
           }
         }

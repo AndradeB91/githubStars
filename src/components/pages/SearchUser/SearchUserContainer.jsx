@@ -7,8 +7,8 @@ import { search } from '../../../redux';
 class SearchUser extends React.Component {
 
   handleClick = () => {
-    const { login } = this.props;
-    this.props.searchUserAction(login);
+    const { login, searchUserAction } = this.props;
+    searchUserAction(login);
   }
 
   handleChange = (event) => {

@@ -10,6 +10,7 @@ const initialState = asImmutable({
     location: '',
     email: '',
     url: '',
+    starredRepositories: {},
   },
 });
 
@@ -20,6 +21,11 @@ export const reducer = (state = initialState, action) => {
     }
     case actions.SEARCH_USER.SUCCEEDED: {
       return state.mergeIn(['user'], asImmutable(action.payload));
+    }
+    case actions.SEARCH_REPOSITORIES.SUCCEEDED: {
+      debugger;
+      
+      // return state.mergeIn(['user'], asImmutable(action.payload));
     }
     default:
       return state;

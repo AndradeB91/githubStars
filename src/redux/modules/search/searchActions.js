@@ -5,6 +5,8 @@ export const SET_USER = `${MODULE_NAME}/SET_USER`;
 
 export const SEARCH_USER = buildActions(MODULE_NAME, 'SEARCH_USER');
 
+export const SEARCH_REPOSITORIES = buildActions(MODULE_NAME, 'SEARCH_REPOSITORIES');
+
 export const setUser = login => ({
   type: SET_USER,
   payload: {
@@ -12,10 +14,10 @@ export const setUser = login => ({
   },
 })
 
-export const searchUser = name => ({
+export const searchUser = login => ({
   type: SEARCH_USER.REQUESTED,
   payload: {
-    name,
+    login,
   },
 });
 
@@ -26,8 +28,29 @@ export const searchUserSucceeded = data => ({
   },
 });
 
-export const signInWithEmailFailed = error => ({
+export const searchUserFailed = error => ({
   type: SEARCH_USER.FAILED,
+  payload: {
+    error,
+  },
+});
+
+export const searchRepositories = login => ({
+  type: SEARCH_REPOSITORIES.REQUESTED,
+  payload: {
+    login,
+  },
+});
+
+export const searchRepositoriesSucceeded = data => ({
+  type: SEARCH_REPOSITORIES.SUCCEEDED,
+  payload: {
+    data,
+  },
+});
+
+export const searchRepositoriesFailed = error => ({
+  type: SEARCH_REPOSITORIES.FAILED,
   payload: {
     error,
   },
