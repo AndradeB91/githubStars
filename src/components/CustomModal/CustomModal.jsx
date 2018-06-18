@@ -1,24 +1,60 @@
 import React from 'react';
-import { Button, Header, Icon, Modal } from 'semantic-ui-react'
+import { Button, Header, Modal, Segment } from 'semantic-ui-react'
+import GithubRepositoryItem from '../GithubRepositoryItem';
 import PropTypes from 'prop-types';
+import uuid from 'uuid';
+
+const renderUserStarredRepositories = (object, buttonClickAction) => {
+
+  return (
+    Object.entries(object.toJS()).map(([id, value]) => {
+      debugger;
+      const { 
+        name, 
+        owner, 
+        description,
+        starredCount,
+        starred,
+      } = value;
+      return (
+        <Segment raised key={`${id}_${uuid()}`}>
+          <GithubRepositoryItem
+            id={id}
+            name={name}
+            owner={owner}
+            description={description}
+            starredCount={starredCount}
+            starActive={starred}
+            buttonClickAction={buttonClickAction}
+          />
+        </Segment>
+      )
+    })
+  );
+}
 
 const CustomModal = ({ 
   buttonText,
   onClickAction,
-  actionParameter,
   headerIcon,
   headerContent,
+  userStarredRepositories,
+  buttonClickAction,
 }) => (
-  <Modal dimmer = {'blurring'} trigger = {
+  <Modal dimmer={'blurring'} trigger = {
     <Button onClick={onClickAction}>
       {buttonText}
     </Button>
   } closeIcon>
-    <Header icon = {headerIcon} content = {headerContent} />
+    <Header 
+      icon={headerIcon} 
+      content={headerContent} 
+    />
     <Modal.Content>
-      <p>
-        Your inbox is getting full, would you like us to enable automatic archiving of old messages?
-      </p>
+      {renderUserStarredRepositories(
+        userStarredRepositories, 
+        buttonClickAction
+      )}
     </Modal.Content>
   </Modal>
 );
@@ -28,6 +64,7 @@ CustomModal.propTypes = {
   onClickAction: PropTypes.func,
   headerIcon: PropTypes.string,
   headerContent: PropTypes.string,
+  userStarredRepositories: PropTypes.object,
 }
 
 export default CustomModal;

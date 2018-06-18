@@ -1,4 +1,4 @@
-import { Iterable, fromJS, isImmutable } from 'immutable';
+import { Iterable, fromJS } from 'immutable';
 import { createBrowserHistory } from 'history';
 
 export const asImmutable = (obj) => (Iterable.isIterable(obj) ? obj : fromJS(obj));

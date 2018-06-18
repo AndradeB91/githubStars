@@ -1,19 +1,23 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect'
-import uuid from 'uuid';
 import { search } from '../../../redux';
 import Card from '../../CustomCard';
-import Button from '../../CustomButton';
 import Modal from '../../CustomModal';
 
 class Profile extends React.Component {
+
+	buttonClickAction = (event) => {
+		const { id } = event.target;
+		const { starRepositoryAction } = this.props;
+		starRepositoryAction(id);
+	}
 
   render () {
 		const { 
 			userInfos, 
 			searchRepositoriesAction,
-			userStarredRepositories
+			userStarredRepositories,
 		} = this.props;
 		const name = userInfos.get('name');
 		const login = userInfos.get('login');
@@ -46,8 +50,8 @@ class Profile extends React.Component {
 					headerIcon = 'github' 
 					headerContent = 'Starred Repositories'
 					onClickAction = {searchRepositoriesAction}
-					actionParameter = {login}
 					userStarredRepositories = {userStarredRepositories}
+					buttonClickAction = {this.buttonClickAction}
 				/>
       </Fragment>
     )
@@ -61,6 +65,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = {
   searchRepositoriesAction: search.actions.searchRepositories, 
+	starRepositoryAction: search.actions.starRepository,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

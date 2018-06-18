@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Switch, Route, Router } from 'react-router-dom';
 import SearchUser from '../../pages/SearchUser';

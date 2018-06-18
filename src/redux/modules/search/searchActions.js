@@ -7,6 +7,8 @@ export const SEARCH_USER = buildActions(MODULE_NAME, 'SEARCH_USER');
 
 export const SEARCH_REPOSITORIES = buildActions(MODULE_NAME, 'SEARCH_REPOSITORIES');
 
+export const STAR_REPOSITORY = buildActions(MODULE_NAME, 'STAR_REPOSITORY');
+
 export const setUser = login => ({
   type: SET_USER,
   payload: {
@@ -51,6 +53,27 @@ export const searchRepositoriesSucceeded = data => ({
 
 export const searchRepositoriesFailed = error => ({
   type: SEARCH_REPOSITORIES.FAILED,
+  payload: {
+    error,
+  },
+});
+
+export const starRepository = id => ({
+  type: STAR_REPOSITORY.REQUESTED,
+  payload: {
+    id,
+  },
+});
+
+export const starRepositorySuceeded = data => ({
+  type: STAR_REPOSITORY.SUCCEEDED,
+  payload: {
+    data,
+  },
+});
+
+export const starRepositoryFailed = error => ({
+  type: STAR_REPOSITORY.FAILED,
   payload: {
     error,
   },

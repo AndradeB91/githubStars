@@ -1,16 +1,24 @@
-import { all, take, takeLatest, call, put, select } from 'redux-saga/effects';
+import { all, takeLatest, call, put, select } from 'redux-saga/effects';
 import { push } from 'react-router-redux';
 import { actions } from '../search';
 import { graphqlClient } from '../../../api/graphql';
-import { getUserLogin } from './searchSelectors';
+
+import { 
+	getUserLogin, 
+	getUserStarredRepositories,
+} from './searchSelectors';
+
 import { 
 	getUserInfosByLogin, 
 	getUserStarredRepositoriesByLogin,
 } from '../../../api/graphql/queries';
 
+import { 
+	addStarMutation, 
+} from '../../../api/graphql/mutations';
+
 function* searchUser(action) {
 	try {
-		debugger;
 		const { login } = action.payload;
 		const query = getUserInfosByLogin(login);
 		const payload = yield call(graphqlClient.query, query);
@@ -31,29 +39,54 @@ function* searchUser(action) {
 
 function* searchRepositories(action) {
 	try {
-		const login = yield select(getUserLogin);
-		const query = getUserStarredRepositoriesByLogin(login);
-		const payload = yield call(graphqlClient.query, query);
-		const { data: { user: { starredRepositories } } } = payload;
-		const repos = starredRepositories.edges;
+		const reposInState = yield select(getUserStarredRepositories);
+		if(reposInState.size === 0) {
+			const login = yield select(getUserLogin);
+			const query = getUserStarredRepositoriesByLogin(login);
+			const payload = yield call(graphqlClient.query, query);
+			const { data: { user: { starredRepositories } } } = payload;
+			const repos = starredRepositories.edges;
+			let formattedRepos = {};
 
-		let formattedRepos = [];
-
-		repos.map(repo => {
-			formattedRepos.push({
-				owner: repo.node.owner.login,
-				description: repo.node.description,
-				starredCount: repo.node.stargazers.totalCount,
+			repos.map(repo => {
+				const { id } = repo.node;
+				formattedRepos[id] = {
+					name: repo.node.name,
+					owner: repo.node.owner.login,
+					description: repo.node.description,
+					starredCount: repo.node.stargazers.totalCount,
+					starred: false,
+				}
 			})
-		})
 
-		yield put({
-			type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
-			payload: formattedRepos,
-		})
+			yield put({
+				type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
+				payload: formattedRepos,
+			})
+		}
 	} catch (err) {
 		yield put({
 			type: actions.SEARCH_REPOSITORIES.FAILED,
+		})
+    console.log(err);
+  }
+}
+
+function* starRepository(action) {
+	try {
+		const { id } = action.payload;
+		const mutation = addStarMutation(id);
+
+		const payload = yield call(graphqlClient.mutate, mutation);
+		const starredId = payload.data.addStar.starrable.id;
+		yield put({
+			type: actions.STAR_REPOSITORY.SUCCEEDED,
+			payload: starredId,
+		})
+
+	} catch (err) {
+		yield put({
+			type: actions.STAR_REPOSITORY.FAILED,
 		})
     console.log(err);
   }
@@ -67,10 +100,15 @@ function* watchSearchRepositoriesRequested() {
   yield takeLatest(actions.SEARCH_REPOSITORIES.REQUESTED, searchRepositories)
 }
 
+function* watchStarRepositoryRequested() {
+  yield takeLatest(actions.STAR_REPOSITORY.REQUESTED, starRepository)
+}
+
 function* sagas() {
 	yield all([
 		watchSearchUserRequested(),
 		watchSearchRepositoriesRequested(),
+		watchStarRepositoryRequested(),
 	])
 }
 

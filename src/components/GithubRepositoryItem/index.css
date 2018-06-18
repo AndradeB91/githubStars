@@ -1,0 +1,13 @@
+.mainContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.starContainer {
+	display: flex;
+}
+.customHeader {
+  margin-bottom: 0.3rem; 
+}
+.buttonContainer {
+  align-self: center;
+}

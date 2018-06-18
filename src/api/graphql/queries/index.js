@@ -1,17 +1,15 @@
 import gql from 'graphql-tag'
 
 export const getLoggedUserName = {
-  query: gql`
-  { 
+  query: gql`{ 
     viewer { 
       login
     }
-  }
-`};
+  }`
+};
 
 export const getUserInfosByLogin = (login) => ({
-  query: gql`
-  {
+  query: gql`{
     user(login: ${login}) {
       name
       login
@@ -21,14 +19,13 @@ export const getUserInfosByLogin = (login) => ({
       email
       url
     }
-  }
-`});
+  }`
+});
 
 export const getUserStarredRepositoriesByLogin = (login) => ({
-  query: gql`
-  {
+  query: gql`{
     user(login: ${login}) {
-      starredRepositories(first: 100) {
+      starredRepositories(first: 4) {
         edges {
           node {
             id
@@ -38,11 +35,12 @@ export const getUserStarredRepositoriesByLogin = (login) => ({
               totalCount
             }
             owner {
+              id
               login
             }
           }
         }
       }
     }
-  }
-`});
+  }`
+});
