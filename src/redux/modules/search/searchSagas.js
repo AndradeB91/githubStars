@@ -10,7 +10,10 @@ import {
   getUserStarredRepositoriesByLogin,
 } from '../../../api/graphql/queries';
 
-import { addStarMutation } from '../../../api/graphql/mutations';
+import {
+  addStarMutation,
+  removeStarMutation,
+} from '../../../api/graphql/mutations';
 
 function* searchUser(action) {
   try {
@@ -69,14 +72,19 @@ function* searchRepositories(action) {
 
 function* starRepository(action) {
   try {
-    const { id } = action.payload;
-    const mutation = addStarMutation(id);
-
+    const { id, isStarred } = action.payload;
+    const mutation = isStarred ? removeStarMutation(id) : addStarMutation(id);
     const payload = yield call(graphqlClient.mutate, mutation);
-    const starredId = payload.data.addStar.starrable.id;
+    const { data } = payload;
+    const starredId = isStarred
+      ? data.removeStar.starrable.id
+      : data.addStar.starrable.id;
     yield put({
       type: actions.STAR_REPOSITORY.SUCCEEDED,
-      payload: starredId,
+      payload: {
+        starredId,
+        isStarred,
+      },
     });
   } catch (err) {
     yield put({

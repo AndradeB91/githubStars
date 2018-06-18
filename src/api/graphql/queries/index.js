@@ -27,7 +27,7 @@ export const getUserInfosByLogin = login => ({
 export const getUserStarredRepositoriesByLogin = login => ({
   query: gql`{
     user(login: ${login}) {
-      starredRepositories(first: 4) {
+      starredRepositories(first: 100) {
         edges {
           node {
             id

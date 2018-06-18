@@ -6,10 +6,12 @@ import Card from '../../CustomCard';
 import Modal from '../../CustomModal';
 
 class Profile extends React.Component {
-  buttonClickAction = event => {
+  switchRepoStarAction = event => {
     const { id } = event.target;
-    const { starRepositoryAction } = this.props;
-    starRepositoryAction(id);
+    const { userStarredRepositories, starRepositoryAction } = this.props;
+    const repository = userStarredRepositories.get(id);
+    const isStarred = repository.get('starred');
+    starRepositoryAction(id, isStarred);
   };
 
   render() {
@@ -50,7 +52,7 @@ class Profile extends React.Component {
           headerContent="Starred Repositories"
           onClickAction={searchRepositoriesAction}
           userStarredRepositories={userStarredRepositories}
-          buttonClickAction={this.buttonClickAction}
+          buttonClickAction={this.switchRepoStarAction}
         />
       </Fragment>
     );

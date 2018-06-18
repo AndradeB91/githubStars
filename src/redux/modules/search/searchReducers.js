@@ -29,10 +29,10 @@ export const reducer = (state = initialState, action) => {
       );
     }
     case actions.STAR_REPOSITORY.SUCCEEDED: {
-      const id = action.payload;
+      const { starredId, isStarred } = action.payload;
       state = state.mergeIn(
-        ['user', 'starredRepositories', id, 'starred'],
-        true,
+        ['user', 'starredRepositories', starredId, 'starred'],
+        !isStarred,
       );
       return state;
     }

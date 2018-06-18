@@ -61,10 +61,11 @@ export const searchRepositoriesFailed = error => ({
   },
 });
 
-export const starRepository = id => ({
+export const starRepository = (id, isStarred) => ({
   type: STAR_REPOSITORY.REQUESTED,
   payload: {
     id,
+    isStarred,
   },
 });
 
