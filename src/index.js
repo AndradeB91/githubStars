@@ -10,11 +10,11 @@ import App from './components/layout/App';
 
 const store = createReduxStore();
 
-ReactDOM.render((
+ReactDOM.render(
   <ApolloProvider client={graphqlClient}>
-    <Provider store={ store }>
+    <Provider store={store}>
       <App />
     </Provider>
-  </ApolloProvider>
-  ), document.getElementById('root')
+  </ApolloProvider>,
+  document.getElementById('root'),
 );

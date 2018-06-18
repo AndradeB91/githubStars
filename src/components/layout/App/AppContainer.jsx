@@ -11,8 +11,8 @@ class App extends Component {
       <div className="App">
         <Router history={getHistory()}>
           <Switch>
-            <Route exact path="/" component={SearchUser}/>
-            <Route exact path="/profile" component={Profile}/>
+            <Route exact path="/" component={SearchUser} />
+            <Route exact path="/profile" component={Profile} />
           </Switch>
         </Router>
       </div>

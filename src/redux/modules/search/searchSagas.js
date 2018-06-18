@@ -3,113 +3,107 @@ import { push } from 'react-router-redux';
 import { actions } from '../search';
 import { graphqlClient } from '../../../api/graphql';
 
-import { 
-	getUserLogin, 
-	getUserStarredRepositories,
-} from './searchSelectors';
+import { getUserLogin, getUserStarredRepositories } from './searchSelectors';
 
-import { 
-	getUserInfosByLogin, 
-	getUserStarredRepositoriesByLogin,
+import {
+  getUserInfosByLogin,
+  getUserStarredRepositoriesByLogin,
 } from '../../../api/graphql/queries';
 
-import { 
-	addStarMutation, 
-} from '../../../api/graphql/mutations';
+import { addStarMutation } from '../../../api/graphql/mutations';
 
 function* searchUser(action) {
-	try {
-		const { login } = action.payload;
-		const query = getUserInfosByLogin(login);
-		const payload = yield call(graphqlClient.query, query);
-		const { data: { user } } = payload;
-		
-		yield put({
-			type: actions.SEARCH_USER.SUCCEEDED,
-			payload: user,
-		})
-		yield put(push('/profile'));
-	} catch (err) {
-		yield put({
-			type: actions.SEARCH_USER.FAILED,
-		})
+  try {
+    const { login } = action.payload;
+    const query = getUserInfosByLogin(login);
+    const payload = yield call(graphqlClient.query, query);
+    const { data: { user } } = payload;
+
+    yield put({
+      type: actions.SEARCH_USER.SUCCEEDED,
+      payload: user,
+    });
+    yield put(push('/profile'));
+  } catch (err) {
+    yield put({
+      type: actions.SEARCH_USER.FAILED,
+    });
     console.log(err);
   }
 }
 
 function* searchRepositories(action) {
-	try {
-		const reposInState = yield select(getUserStarredRepositories);
-		if(reposInState.size === 0) {
-			const login = yield select(getUserLogin);
-			const query = getUserStarredRepositoriesByLogin(login);
-			const payload = yield call(graphqlClient.query, query);
-			const { data: { user: { starredRepositories } } } = payload;
-			const repos = starredRepositories.edges;
-			let formattedRepos = {};
+  try {
+    const reposInState = yield select(getUserStarredRepositories);
+    if (reposInState.size === 0) {
+      const login = yield select(getUserLogin);
+      const query = getUserStarredRepositoriesByLogin(login);
+      const payload = yield call(graphqlClient.query, query);
+      const { data: { user: { starredRepositories } } } = payload;
+      const repos = starredRepositories.edges;
+      let formattedRepos = {};
 
-			repos.map(repo => {
-				const { id } = repo.node;
-				formattedRepos[id] = {
-					name: repo.node.name,
-					owner: repo.node.owner.login,
-					description: repo.node.description,
-					starredCount: repo.node.stargazers.totalCount,
-					starred: false,
-				}
-			})
+      repos.map(repo => {
+        const { id } = repo.node;
+        formattedRepos[id] = {
+          name: repo.node.name,
+          owner: repo.node.owner.login,
+          description: repo.node.description,
+          starredCount: repo.node.stargazers.totalCount,
+          starred: false,
+        };
+      });
 
-			yield put({
-				type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
-				payload: formattedRepos,
-			})
-		}
-	} catch (err) {
-		yield put({
-			type: actions.SEARCH_REPOSITORIES.FAILED,
-		})
+      yield put({
+        type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
+        payload: formattedRepos,
+      });
+    }
+  } catch (err) {
+    yield put({
+      type: actions.SEARCH_REPOSITORIES.FAILED,
+    });
     console.log(err);
   }
 }
 
 function* starRepository(action) {
-	try {
-		const { id } = action.payload;
-		const mutation = addStarMutation(id);
+  try {
+    const { id } = action.payload;
+    const mutation = addStarMutation(id);
 
-		const payload = yield call(graphqlClient.mutate, mutation);
-		const starredId = payload.data.addStar.starrable.id;
-		yield put({
-			type: actions.STAR_REPOSITORY.SUCCEEDED,
-			payload: starredId,
-		})
-
-	} catch (err) {
-		yield put({
-			type: actions.STAR_REPOSITORY.FAILED,
-		})
+    const payload = yield call(graphqlClient.mutate, mutation);
+    const starredId = payload.data.addStar.starrable.id;
+    yield put({
+      type: actions.STAR_REPOSITORY.SUCCEEDED,
+      payload: starredId,
+    });
+  } catch (err) {
+    yield put({
+      type: actions.STAR_REPOSITORY.FAILED,
+    });
     console.log(err);
   }
 }
 
 function* watchSearchUserRequested() {
-  yield takeLatest(actions.SEARCH_USER.REQUESTED, searchUser)
+  yield takeLatest(actions.SEARCH_USER.REQUESTED, searchUser);
 }
 
 function* watchSearchRepositoriesRequested() {
-  yield takeLatest(actions.SEARCH_REPOSITORIES.REQUESTED, searchRepositories)
+  yield takeLatest(actions.SEARCH_REPOSITORIES.REQUESTED, searchRepositories);
 }
 
 function* watchStarRepositoryRequested() {
-  yield takeLatest(actions.STAR_REPOSITORY.REQUESTED, starRepository)
+  yield takeLatest(actions.STAR_REPOSITORY.REQUESTED, starRepository);
 }
 
 function* sagas() {
-	yield all([
-		watchSearchUserRequested(),
-		watchSearchRepositoriesRequested(),
-		watchStarRepositoryRequested(),
-	])
+  yield all([
+    watchSearchUserRequested(),
+    watchSearchRepositoriesRequested(),
+    watchStarRepositoryRequested(),
+  ]);
 }
 
 export default sagas;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Icon, Header, Button } from 'semantic-ui-react'
+import { Icon, Header, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import './index.css';
 
-const GithubRepository = ({ 
+const GithubRepository = ({
   id,
   name,
   owner,
@@ -12,18 +12,18 @@ const GithubRepository = ({
   starActive,
   buttonClickAction,
 }) => (
-  <div className='mainContainer'>
+  <div className="mainContainer">
     <div>
-      <Header as='h3' style={{margin: '0px'}}>
+      <Header as="h3" style={{ margin: '0px' }}>
         {`${owner} / ${name}`}
       </Header>
       <p>{description}</p>
-      <div className='starContainer'>
-        <Icon name = 'star outline'/>
+      <div className="starContainer">
+        <Icon name="star outline" />
         <div>{starredCount}</div>
       </div>
     </div>
-    <div className='buttonContainer'>
+    <div className="buttonContainer">
       <Button toggle active={starActive} id={id} onClick={buttonClickAction}>
         {starActive ? 'unstar' : 'star'}
       </Button>
@@ -39,6 +39,6 @@ GithubRepository.propTypes = {
   starredCount: PropTypes.number,
   starActive: PropTypes.bool,
   buttonClickAction: PropTypes.func,
-}
+};
 
 export default GithubRepository;

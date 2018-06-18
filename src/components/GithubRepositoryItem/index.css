@@ -3,10 +3,10 @@
   justify-content: space-between;
 }
 .starContainer {
-	display: flex;
+  display: flex;
 }
 .customHeader {
-  margin-bottom: 0.3rem; 
+  margin-bottom: 0.3rem;
 }
 .buttonContainer {
   align-self: center;

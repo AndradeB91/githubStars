@@ -1,18 +1,13 @@
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 export const addStarMutation = starrableId => ({
   mutation: gql`
     mutation {
-      addStar(input: { starrableId: "${starrableId}" }) {
+      addStar(input: { starrableId: '${starrableId}' }) {
         starrable{
           id
         }
-      } 
+      }
     }
   `,
 });
-
-
-
-
-

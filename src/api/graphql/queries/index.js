@@ -1,14 +1,16 @@
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 export const getLoggedUserName = {
-  query: gql`{ 
-    viewer { 
-      login
+  query: gql`
+    {
+      viewer {
+        login
+      }
     }
-  }`
+  `,
 };
 
-export const getUserInfosByLogin = (login) => ({
+export const getUserInfosByLogin = login => ({
   query: gql`{
     user(login: ${login}) {
       name
@@ -19,10 +21,10 @@ export const getUserInfosByLogin = (login) => ({
       email
       url
     }
-  }`
+  }`,
 });
 
-export const getUserStarredRepositoriesByLogin = (login) => ({
+export const getUserStarredRepositoriesByLogin = login => ({
   query: gql`{
     user(login: ${login}) {
       starredRepositories(first: 4) {
@@ -42,5 +44,5 @@ export const getUserStarredRepositoriesByLogin = (login) => ({
         }
       }
     }
-  }`
+  }`,
 });

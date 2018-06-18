@@ -5,7 +5,10 @@ export const SET_USER = `${MODULE_NAME}/SET_USER`;
 
 export const SEARCH_USER = buildActions(MODULE_NAME, 'SEARCH_USER');
 
-export const SEARCH_REPOSITORIES = buildActions(MODULE_NAME, 'SEARCH_REPOSITORIES');
+export const SEARCH_REPOSITORIES = buildActions(
+  MODULE_NAME,
+  'SEARCH_REPOSITORIES',
+);
 
 export const STAR_REPOSITORY = buildActions(MODULE_NAME, 'STAR_REPOSITORY');
 
@@ -14,7 +17,7 @@ export const setUser = login => ({
   payload: {
     login,
   },
-})
+});
 
 export const searchUser = login => ({
   type: SEARCH_USER.REQUESTED,
@@ -78,4 +81,3 @@ export const starRepositoryFailed = error => ({
     error,
   },
 });
-
