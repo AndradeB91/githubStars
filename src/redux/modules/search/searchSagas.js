@@ -39,35 +39,32 @@ function* searchUser(action) {
 
 function* searchRepositories(action) {
   try {
-    // const reposInState = yield select(getUserStarredRepositories);
-    if (true) {
-      const login = yield select(getUserLogin);
-      const query = getUserStarredRepositoriesByLogin(login);
-      const payload = yield call(graphqlClient.query, query);
-      const {
-        data: {
-          user: { starredRepositories },
-        },
-      } = payload;
-      const repos = starredRepositories.edges;
-      let formattedRepos = {};
+    const login = yield select(getUserLogin);
+    const query = getUserStarredRepositoriesByLogin(login);
+    const payload = yield call(graphqlClient.query, query);
+    const {
+      data: {
+        user: { starredRepositories },
+      },
+    } = payload;
+    const repos = starredRepositories.edges;
+    let formattedRepos = {};
 
-      repos.map(repo => {
-        const { id } = repo.node;
-        formattedRepos[id] = {
-          name: repo.node.name,
-          owner: repo.node.owner.login,
-          description: repo.node.description,
-          starredCount: repo.node.stargazers.totalCount,
-          starred: false,
-        };
-      });
+    repos.map(repo => {
+      const { id } = repo.node;
+      formattedRepos[id] = {
+        name: repo.node.name,
+        owner: repo.node.owner.login,
+        description: repo.node.description,
+        starredCount: repo.node.stargazers.totalCount,
+        starred: false,
+      };
+    });
 
-      yield put({
-        type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
-        payload: formattedRepos,
-      });
-    }
+    yield put({
+      type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
+      payload: formattedRepos,
+    });
   } catch (err) {
     yield put({
       type: actions.SEARCH_REPOSITORIES.FAILED,
