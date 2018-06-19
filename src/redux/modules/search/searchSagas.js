@@ -20,29 +20,35 @@ function* searchUser(action) {
     const { login } = action.payload;
     const query = getUserInfosByLogin(login);
     const payload = yield call(graphqlClient.query, query);
-    const { data: { user } } = payload;
+    const {
+      data: { user },
+    } = payload;
 
     yield put({
       type: actions.SEARCH_USER.SUCCEEDED,
       payload: user,
     });
-    yield put(push('/profile'));
   } catch (err) {
     yield put({
       type: actions.SEARCH_USER.FAILED,
     });
     console.log(err);
   }
+  yield put(push('/profile'));
 }
 
 function* searchRepositories(action) {
   try {
-    const reposInState = yield select(getUserStarredRepositories);
-    if (reposInState.size === 0) {
+    // const reposInState = yield select(getUserStarredRepositories);
+    if (true) {
       const login = yield select(getUserLogin);
       const query = getUserStarredRepositoriesByLogin(login);
       const payload = yield call(graphqlClient.query, query);
-      const { data: { user: { starredRepositories } } } = payload;
+      const {
+        data: {
+          user: { starredRepositories },
+        },
+      } = payload;
       const repos = starredRepositories.edges;
       let formattedRepos = {};
 

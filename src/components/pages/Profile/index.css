@@ -1,3 +1,15 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  padding: 35px;
+}
+
+.cardContainer {
+  align-self: center;
+  padding: 40px;
+}
+
 .extraInfoContainer {
   display: flex;
   justify-content: left;

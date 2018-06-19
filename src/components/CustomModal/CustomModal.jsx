@@ -32,7 +32,6 @@ const CustomModal = ({
   buttonClickAction,
 }) => (
   <Modal
-    dimmer={'blurring'}
     trigger={<Button onClick={onClickAction}>{buttonText}</Button>}
     closeIcon
   >

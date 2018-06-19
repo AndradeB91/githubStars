@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Switch, Route, Router } from 'react-router-dom';
-import SearchUser from '../../pages/SearchUser';
-import Profile from '../../pages/Profile';
+import Dispenser from '../../pages/Dispenser';
 import { getHistory } from '../../../utils';
 
 class App extends Component {
@@ -11,8 +10,8 @@ class App extends Component {
       <div className="App">
         <Router history={getHistory()}>
           <Switch>
-            <Route exact path="/" component={SearchUser} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/" component={Dispenser} />
+            <Route exact path="/profile" component={Dispenser} />
           </Switch>
         </Router>
       </div>

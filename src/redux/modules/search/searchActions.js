@@ -14,9 +14,7 @@ export const STAR_REPOSITORY = buildActions(MODULE_NAME, 'STAR_REPOSITORY');
 
 export const setUser = login => ({
   type: SET_USER,
-  payload: {
-    login,
-  },
+  payload: login,
 });
 
 export const searchUser = login => ({

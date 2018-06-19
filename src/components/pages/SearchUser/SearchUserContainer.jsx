@@ -1,49 +1,23 @@
-import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { Input, Header } from 'semantic-ui-react';
-import { search } from '../../../redux';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Header } from 'semantic-ui-react';
+import Input from '../../CustomInput';
+import './index.css';
 
-class SearchUser extends React.Component {
-  handleChange = event => {
-    const { value } = event.target;
-    const { setUserAction } = this.props;
-    setUserAction(value);
-  };
+const SearchUser = ({ handleChange, handleClick }) => (
+  <div className="searchContainer">
+    <div className="headerContainer">
+      <Header as="h1" icon="github" content="GithubStars" />
+    </div>
+    <div className="inputContainer">
+      <Input onChange={handleChange} onKeyUp={handleClick} />
+    </div>
+  </div>
+);
 
-  handleClick = event => {
-    if (event.keyCode === 13) {
-      const { login, searchUserAction } = this.props;
-      searchUserAction(login);
-    }
-  };
-
-  render() {
-    return (
-      <Fragment>
-        <Header as="h1">GithubStars</Header>
-        <div className="inputContainer">
-          <Input
-            fluid
-            size="massive"
-            icon="search"
-            placeholder="github username..."
-            onChange={this.handleChange}
-            onKeyUp={this.handleClick}
-          />
-        </div>
-      </Fragment>
-    );
-  }
-}
-
-const mapStateToProps = createStructuredSelector({
-  login: search.selectors.getUserLogin,
-});
-
-const mapDispatchToProps = {
-  setUserAction: search.actions.setUser,
-  searchUserAction: search.actions.searchUser,
+SearchUser.propTypes = {
+  handleChange: PropTypes.func,
+  handleClick: PropTypes.func,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchUser);
+export default SearchUser;

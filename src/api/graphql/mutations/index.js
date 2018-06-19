@@ -9,7 +9,7 @@ export const addStarMutation = starrableId => ({
         }
       }
     }
-  `,
+  `
 });
 
 export const removeStarMutation = starrableId => ({
@@ -21,5 +21,5 @@ export const removeStarMutation = starrableId => ({
         }
       }
     }
-  `,
+  `
 });
