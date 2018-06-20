@@ -19,6 +19,12 @@ class Dispenser extends React.Component {
     }
   };
 
+  onPageChange = (event, data) => {
+    const { searchRepositoriesAction } = this.props;
+    const pagination = data.id;
+    searchRepositoriesAction(pagination);
+  };
+
   render() {
     const { path } = this.props.match;
     const {
@@ -39,6 +45,7 @@ class Dispenser extends React.Component {
             handleChange={this.handleChange}
             handleClick={this.handleClick}
             toastMessage={toastMessage}
+            onPageChange={this.onPageChange}
           />
         );
       }

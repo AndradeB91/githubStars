@@ -3,11 +3,16 @@ import { push } from 'react-router-redux';
 import { actions } from '../search';
 import { graphqlClient } from '../../../api/graphql';
 
-import { getUserLogin, getUserStarredRepositories } from './searchSelectors';
+import {
+  getUserLogin,
+  getNextCursor,
+  getBeforeCursor,
+} from './searchSelectors';
 
 import {
   getUserInfosByLogin,
   getUserStarredRepositoriesByLogin,
+  getUserStarredRepositoriesByLoginWithCursor,
 } from '../../../api/graphql/queries';
 
 import {
@@ -40,7 +45,32 @@ function* searchUser(action) {
 function* searchRepositories(action) {
   try {
     const login = yield select(getUserLogin);
-    const query = getUserStarredRepositoriesByLogin(login);
+    const nextCursor = yield select(getNextCursor);
+    const beforeCursor = yield select(getBeforeCursor);
+    const { pagination } = action.payload;
+
+    const direction =
+      pagination === 'next' ? 'after' : pagination === 'back' ? 'before' : null;
+
+    const subSet =
+      pagination === 'next' ? 'first' : pagination === 'back' ? 'last' : null;
+
+    const cursor =
+      pagination === 'next'
+        ? nextCursor
+        : pagination === 'back'
+          ? beforeCursor
+          : null;
+
+    const query = cursor
+      ? getUserStarredRepositoriesByLoginWithCursor(
+          login,
+          cursor,
+          direction,
+          subSet,
+        )
+      : getUserStarredRepositoriesByLogin(login);
+
     const payload = yield call(graphqlClient.query, query);
     const {
       data: {
@@ -48,6 +78,10 @@ function* searchRepositories(action) {
       },
     } = payload;
     const repos = starredRepositories.edges;
+    const actualNextCursor = repos.length
+      ? repos[repos.length - 1].cursor
+      : null;
+    const actualBeforeCursor = repos.length ? repos[0].cursor : null;
     let formattedRepos = {};
 
     repos.map(repo => {
@@ -64,6 +98,16 @@ function* searchRepositories(action) {
     yield put({
       type: actions.SEARCH_REPOSITORIES.SUCCEEDED,
       payload: formattedRepos,
+    });
+
+    yield put({
+      type: actions.SET_NEXT_CURSOR,
+      payload: actualNextCursor,
+    });
+
+    yield put({
+      type: actions.SET_BEFORE_CURSOR,
+      payload: actualBeforeCursor,
     });
   } catch (err) {
     yield put({

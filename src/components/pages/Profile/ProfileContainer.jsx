@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Input from '../../CustomInput';
 import Card from '../../CustomCard';
 import Modal from '../../CustomModal';
-import { Image } from 'semantic-ui-react';
+import { Image, Header } from 'semantic-ui-react';
 import './index.css';
 import UserNotFoundImage from '../../../assets/images/not_found.png';
 import { toast, ToastContainer } from 'react-toastify';
@@ -32,6 +32,7 @@ class Profile extends React.Component {
       userStarredRepositories,
       handleChange,
       handleClick,
+      onPageChange,
     } = this.props;
 
     const name = userInfos.get('name');
@@ -77,12 +78,16 @@ class Profile extends React.Component {
                 onClickAction={searchRepositoriesAction}
                 userStarredRepositories={userStarredRepositories}
                 buttonClickAction={this.switchRepoStarAction}
+                onPageChange={onPageChange}
               />
             </div>
             <ToastContainer autoClose={5000} />
           </Fragment>
         ) : (
-          <Image src={UserNotFoundImage} fluid />
+          <Fragment>
+            <Header as="h2">User Not Found</Header>
+            <Image src={UserNotFoundImage} size="medium" centered />
+          </Fragment>
         )}
       </div>
     );

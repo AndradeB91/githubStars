@@ -4,7 +4,7 @@ import * as actions from './searchActions';
 const initialState = asImmutable({
   toast: '',
   loginToFetch: '',
-  user: {
+  user: asImmutable({
     name: '',
     login: '',
     avatarUrl: '',
@@ -12,30 +12,40 @@ const initialState = asImmutable({
     location: '',
     email: '',
     url: '',
-    starredRepositories: asImmutable({}),
-  },
+  }),
+  starredRepositories: asImmutable({}),
+  nextCursor: null,
+  beforeCursor: null,
 });
 
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actions.SET_USER: {
-      state = state.setIn(['toast'], '');
-      return state.mergeIn(['loginToFetch'], asImmutable(action.payload));
+      return state
+        .setIn(['loginToFetch'], asImmutable(action.payload))
+        .setIn(['toast'], '');
+    }
+    case actions.SET_NEXT_CURSOR: {
+      return state.setIn(['nextCursor'], action.payload).setIn(['toast'], '');
+    }
+    case actions.SET_BEFORE_CURSOR: {
+      return state.setIn(['beforeCursor'], action.payload).setIn(['toast'], '');
     }
     case actions.SEARCH_USER.SUCCEEDED: {
-      state = state.setIn(['toast'], '');
-      state = state.mergeIn(['user'], asImmutable(action.payload));
-      return state.setIn(['user', 'starredRepositories'], asImmutable({}));
+      return !action.payload
+        ? initialState
+        : state
+            .setIn(['user'], asImmutable(action.payload))
+            .setIn(['toast'], '')
+            .setIn(['starredRepositories'], asImmutable({}));
     }
     case actions.SEARCH_USER.FAILED: {
       return initialState;
     }
     case actions.SEARCH_REPOSITORIES.SUCCEEDED: {
-      state = state.setIn(['toast'], '');
-      return state.setIn(
-        ['user', 'starredRepositories'],
-        asImmutable(action.payload),
-      );
+      return state
+        .setIn(['starredRepositories'], asImmutable(action.payload))
+        .setIn(['toast'], '');
     }
     case actions.SEARCH_REPOSITORIES.FAILED: {
       return state.setIn(['toast'], 'failed');
@@ -43,12 +53,9 @@ export const reducer = (state = initialState, action) => {
     case actions.STAR_REPOSITORY.SUCCEEDED: {
       const { starredId, isStarred } = action.payload;
       const message = isStarred ? 'unstarred' : 'starred';
-      state = state.setIn(['toast'], message);
-      state = state.mergeIn(
-        ['user', 'starredRepositories', starredId, 'starred'],
-        !isStarred,
-      );
-      return state;
+      return state
+        .mergeIn(['starredRepositories', starredId, 'starred'], !isStarred)
+        .setIn(['toast'], message);
     }
     default:
       return state;

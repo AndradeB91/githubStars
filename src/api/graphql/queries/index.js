@@ -27,8 +27,38 @@ export const getUserInfosByLogin = login => ({
 export const getUserStarredRepositoriesByLogin = login => ({
   query: gql`{
     user(login: ${login}) {
-      starredRepositories(first: 100) {
+      starredRepositories(first: 4) {
         edges {
+          cursor
+          node {
+            id
+            name
+            description
+            stargazers{
+              totalCount
+            }
+            owner {
+              id
+              login
+            }
+          }
+        }
+      }
+    }
+  }`,
+});
+
+export const getUserStarredRepositoriesByLoginWithCursor = (
+  login,
+  cursor,
+  direction,
+  subSet,
+) => ({
+  query: gql`{
+    user(login: ${login}) {
+      starredRepositories(${subSet}: 4, ${direction}: "${cursor}") {
+        edges {
+          cursor
           node {
             id
             name
