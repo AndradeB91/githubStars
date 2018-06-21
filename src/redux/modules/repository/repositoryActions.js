@@ -1,56 +1,15 @@
 import { buildActions } from '../../../utils';
-import MODULE_NAME from './searchConstants';
+import MODULE_NAME from './repositoryConstants';
 
-export const SET_USER = `${MODULE_NAME}/SET_USER`;
-
+export const STAR_REPOSITORY = buildActions(MODULE_NAME, 'STAR_REPOSITORY');
 export const SET_NEXT_CURSOR = `${MODULE_NAME}/SET_NEXT_CURSOR`;
-
 export const SET_BEFORE_CURSOR = `${MODULE_NAME}/SET_BEFORE_CURSOR`;
-
-export const SEARCH_USER = buildActions(MODULE_NAME, 'SEARCH_USER');
+export const CLEAR_TOAST = `${MODULE_NAME}/CLEAR_TOAST`;
 
 export const SEARCH_REPOSITORIES = buildActions(
   MODULE_NAME,
   'SEARCH_REPOSITORIES',
 );
-
-export const STAR_REPOSITORY = buildActions(MODULE_NAME, 'STAR_REPOSITORY');
-
-export const setUser = login => ({
-  type: SET_USER,
-  payload: login,
-});
-
-export const setNextCursor = cursor => ({
-  type: SET_NEXT_CURSOR,
-  payload: cursor,
-});
-
-export const setBeforeCursor = cursor => ({
-  type: SET_BEFORE_CURSOR,
-  payload: cursor,
-});
-
-export const searchUser = login => ({
-  type: SEARCH_USER.REQUESTED,
-  payload: {
-    login,
-  },
-});
-
-export const searchUserSucceeded = data => ({
-  type: SEARCH_USER.SUCCEEDED,
-  payload: {
-    data,
-  },
-});
-
-export const searchUserFailed = error => ({
-  type: SEARCH_USER.FAILED,
-  payload: {
-    error,
-  },
-});
 
 export const searchRepositories = pagination => ({
   type: SEARCH_REPOSITORIES.REQUESTED,
@@ -93,4 +52,14 @@ export const starRepositoryFailed = error => ({
   payload: {
     error,
   },
+});
+
+export const setNextCursor = cursor => ({
+  type: SET_NEXT_CURSOR,
+  payload: cursor,
+});
+
+export const setBeforeCursor = cursor => ({
+  type: SET_BEFORE_CURSOR,
+  payload: cursor,
 });

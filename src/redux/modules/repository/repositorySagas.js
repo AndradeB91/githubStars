@@ -1,16 +1,12 @@
 import { all, takeLatest, call, put, select } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
-import { actions } from '../search';
+import { actions } from '../repository';
 import { graphqlClient } from '../../../api/graphql';
 
-import {
-  getUserLogin,
-  getNextCursor,
-  getBeforeCursor,
-} from './searchSelectors';
+import { getNextCursor, getBeforeCursor } from './repositorySelectors';
+
+import { getUserLogin } from '../user/userSelectors';
 
 import {
-  getUserInfosByLogin,
   getUserStarredRepositoriesByLogin,
   getUserStarredRepositoriesByLoginWithCursor,
 } from '../../../api/graphql/queries';
@@ -19,28 +15,6 @@ import {
   addStarMutation,
   removeStarMutation,
 } from '../../../api/graphql/mutations';
-
-function* searchUser(action) {
-  try {
-    const { login } = action.payload;
-    const query = getUserInfosByLogin(login);
-    const payload = yield call(graphqlClient.query, query);
-    const {
-      data: { user },
-    } = payload;
-
-    yield put({
-      type: actions.SEARCH_USER.SUCCEEDED,
-      payload: user,
-    });
-  } catch (err) {
-    yield put({
-      type: actions.SEARCH_USER.FAILED,
-    });
-    console.log(err);
-  }
-  yield put(push('/profile'));
-}
 
 function* searchRepositories(action) {
   try {
@@ -84,7 +58,7 @@ function* searchRepositories(action) {
     const actualBeforeCursor = repos.length ? repos[0].cursor : null;
     let formattedRepos = {};
 
-    repos.map(repo => {
+    repos.forEach(repo => {
       const { id } = repo.node;
       formattedRepos[id] = {
         name: repo.node.name,
@@ -133,16 +107,14 @@ function* starRepository(action) {
         isStarred,
       },
     });
+
+    yield put({ type: actions.CLEAR_TOAST });
   } catch (err) {
     yield put({
       type: actions.STAR_REPOSITORY.FAILED,
     });
     console.log(err);
   }
-}
-
-function* watchSearchUserRequested() {
-  yield takeLatest(actions.SEARCH_USER.REQUESTED, searchUser);
 }
 
 function* watchSearchRepositoriesRequested() {
@@ -155,7 +127,6 @@ function* watchStarRepositoryRequested() {
 
 function* sagas() {
   yield all([
-    watchSearchUserRequested(),
     watchSearchRepositoriesRequested(),
     watchStarRepositoryRequested(),
   ]);

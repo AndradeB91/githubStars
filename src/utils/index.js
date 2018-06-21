@@ -7,13 +7,9 @@ export const asImmutable = obj =>
 export const emptyMap = asImmutable({});
 
 export const buildActions = (moduleName, prefix, sulfix) => ({
-  REQUESTED: `${moduleName}/${prefix}_${sulfix || ''}${
-    sulfix ? '_' : ''
-  }REQUESTED`,
+  REQUESTED: `${moduleName}/${prefix}_${sulfix || ''}${sulfix ? '_' : ''}REQUESTED`,
   STARTED: `${moduleName}/${prefix}_${sulfix || ''}${sulfix ? '_' : ''}STARTED`,
-  SUCCEEDED: `${moduleName}/${prefix}_${sulfix || ''}${
-    sulfix ? '_' : ''
-  }SUCCEEDED`,
+  SUCCEEDED: `${moduleName}/${prefix}_${sulfix || ''}${sulfix ? '_' : ''}SUCCEEDED`,
   FAILED: `${moduleName}/${prefix}_${sulfix || ''}${sulfix ? '_' : ''}FAILED`,
 });
 

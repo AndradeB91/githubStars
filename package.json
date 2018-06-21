@@ -19,7 +19,7 @@
     "react-github-login": "^1.0.3",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-router-redux": "^4.0.8",
+    "react-router-redux": "^.0.8",
     "react-scripts": "1.1.4",
     "react-toastify": "^4.1.0",
     "redux": "^4.0.0",
@@ -27,6 +27,7 @@
     "redux-immutable": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-saga": "^0.16.0",
+    "redux-saga-test-plan": "^3.7.0",
     "reselect": "^3.0.1",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.81.1",
@@ -38,5 +39,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "redux-test-store": "^0.5.0"
   }
 }
