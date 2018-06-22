@@ -70,6 +70,8 @@ CustomModal.propTypes = {
   headerIcon: PropTypes.string,
   headerContent: PropTypes.string,
   userStarredRepositories: PropTypes.object,
+  buttonClickAction: PropTypes.func,
+  onPageChange: PropTypes.func,
 };
 
 export default CustomModal;
