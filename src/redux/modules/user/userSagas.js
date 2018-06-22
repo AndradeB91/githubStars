@@ -10,14 +10,18 @@ export function* searchUser(action) {
     const { login } = action.payload;
     const query = getUserInfosByLogin(login);
     const payload = yield call(graphqlClient.query, query);
-    const {
-      data: { user },
-    } = payload;
+    const { data: { user } } = payload;
 
-    yield put({
-      type: actions.SEARCH_USER.SUCCEEDED,
-      payload: user,
-    });
+    if (user) {
+      yield put({
+        type: actions.SEARCH_USER.SUCCEEDED,
+        payload: user,
+      });
+    } else {
+      yield put({
+        type: actions.SEARCH_USER.FAILED,
+      });
+    }
   } catch (err) {
     yield put({
       type: actions.SEARCH_USER.FAILED,

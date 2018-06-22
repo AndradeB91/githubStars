@@ -1,7 +1,7 @@
 import { asImmutable } from '../../../utils';
 import * as actions from './userActions';
 
-const initialState = asImmutable({
+export const initialState = asImmutable({
   loginToFetch: '',
   user: asImmutable({
     name: '',
@@ -20,9 +20,7 @@ export const reducer = (state = initialState, action) => {
       return state.setIn(['loginToFetch'], asImmutable(action.payload));
     }
     case actions.SEARCH_USER.SUCCEEDED: {
-      return !action.payload
-        ? initialState
-        : state.setIn(['user'], asImmutable(action.payload));
+      return state.setIn(['user'], asImmutable(action.payload));
     }
     case actions.SEARCH_USER.FAILED: {
       return initialState;

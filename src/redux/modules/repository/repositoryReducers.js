@@ -1,7 +1,7 @@
 import { asImmutable } from '../../../utils';
 import * as actions from './repositoryActions';
 
-const initialState = asImmutable({
+export const initialState = asImmutable({
   starredRepositories: asImmutable({}),
   nextCursor: null,
   beforeCursor: null,

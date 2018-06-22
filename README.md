@@ -25,7 +25,10 @@ export default token;
 
 ## Running the tests
 
-To be done...
+Run:
+```
+yarn test
+```
 
 ## Built With
 
